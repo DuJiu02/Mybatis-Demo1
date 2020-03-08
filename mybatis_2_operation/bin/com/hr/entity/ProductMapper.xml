@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hr.dao.ProductMapper">
+	<resultMap type="Product" id="productBaseMap">
+		<id column="ep_id" property="ep_id"/>
+		<result column="ep_name" property="ep_name"/>
+		<result column="ep_description" property="ep_description"/>
+		<result column="ep_price" property="ep_price"/>
+		<result column="ep_stock" property="ep_stock"/>
+		<result column="epc_id" property="epc_id"/>
+		<result column="epc_child_id" property="epc_child_id"/>
+		<result column="ep_file_name" property="ep_file_name"/>
+	</resultMap>
+</mapper>

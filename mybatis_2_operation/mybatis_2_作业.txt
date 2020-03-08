@@ -1,0 +1,7 @@
+使用easybuy_order,easybuy_order_detail,easybuy_product三张表
+
+按拆分成两个一对多的方式配置
+
+1.查询所有订单以及该订单购买的商品信息
+
+2.查询所有商品以及这些商品被哪些订单购买了

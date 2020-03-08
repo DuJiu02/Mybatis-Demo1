@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hr.dao.OrderMapper">
+	<resultMap type="Order" id="orderBaseMap">
+		<id column="eo_id" property="eo_id"/>
+		<result column="eo_user_id" property="eo_user_id"/>
+		<result column="eo_user_name" property="eo_user_name"/>
+		<result column="eo_user_address" property="eo_user_address"/>
+		<result column="eo_create_time" property="eo_create_time"/>
+		<result column="eo_cost" property="eo_cost"/>
+		<result column="eo_status" property="eo_status"/>
+		<result column="eo_type" property="eo_type"/>
+	</resultMap>
+	
+	<!-- 方式一 -->
+	<resultMap type="Order" id="orderMap1" extends="orderBaseMap">
+		<collection property="odetails" column="eo_id" select="queryOrderDetailByOrderId"></collection>
+	</resultMap>
+	<resultMap type="OrderDetail" id="orderDetailMap1" extends="com.hr.dao.OrderDetailMapper.orderDetailBaseMap">
+		<association property="order" column="eo_id" select="queryOrderByOrderDetail"></association>
+		<association property="product" column="ep_id" select="queryProductByOrderDetail"></association>
+	</resultMap>
+	<select id="queryOrderByOrderDetail" parameterType="int" resultType="Order">
+		select * from easybuy_order where eo_id=#{eoid}
+	</select>
+	<select id="queryProductByOrderDetail" parameterType="int" resultType="Product">
+		select * from easybuy_product where ep_id=#{epid}
+	</select>
+	
+	<select id="queryOrderDetailByOrderId" parameterType="int" resultMap="orderDetailMap1">
+		select * from easybuy_order_detail where eo_id=#{eoid}
+	</select>
+	
+	<select id="queryAll" resultMap="orderMap1">
+		select * from easybuy_order
+	</select>
+	
+	<!-- 方式二 -->
+	<resultMap type="Order" id="orderMap2" extends="orderBaseMap">
+		<collection property="odetails" ofType="OrderDetail">
+			<id column="eod_id" property="eod_id"/>
+			<result column="eo_id" property="eo_id"/>
+			<result column="ep_id" property="ep_id"/>
+			<result column="eod_quantity" property="eod_quantity"/>
+			<result column="eod_cost" property="eod_cost"/>
+			<association property="order" javaType="Order">
+				<id column="eo_id" property="eo_id"/>
+				<result column="eo_user_id" property="eo_user_id"/>
+				<result column="eo_user_name" property="eo_user_name"/>
+				<result column="eo_user_address" property="eo_user_address"/>
+				<result column="eo_create_time" property="eo_create_time"/>
+				<result column="eo_cost" property="eo_cost"/>
+				<result column="eo_status" property="eo_status"/>
+				<result column="eo_type" property="eo_type"/>
+			</association>
+			<association property="product" javaType="Product">
+				<id column="ep_id" property="ep_id"/>
+				<result column="ep_name" property="ep_name"/>
+				<result column="ep_description" property="ep_description"/>
+				<result column="ep_price" property="ep_price"/>
+				<result column="ep_stock" property="ep_stock"/>
+				<result column="epc_id" property="epc_id"/>
+				<result column="epc_child_id" property="epc_child_id"/>
+				<result column="ep_file_name" property="ep_file_name"/>
+			</association>
+		</collection>
+	</resultMap>
+	<select id="queryAll2" resultMap="orderMap2">
+		select * from easybuy_order o left join easybuy_order_detail od on 
+		o.eo_id = od.eo_id left join easybuy_product p on od.ep_id = p.ep_id
+	</select>
+	
+	<!-- 方式三 -->
+		<resultMap type="Order" id="orderMap3" extends="orderBaseMap">
+		<collection property="odetails" resultMap="com.hr.dao.OrderDetailMapper.orderDetailMap3"></collection>
+	</resultMap>
+	
+	<select id="queryAll3" resultMap="orderMap3">
+		select * from easybuy_order o LEFT JOIN easybuy_order_detail od
+		on o.EO_ID=od.EO_ID
+		left join easybuy_product p
+		on od.EP_ID=p.ep_id
+	</select>
+	
+	
+</mapper>

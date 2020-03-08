@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hr.dao.OrderDetailMapper">
+	<resultMap type="OrderDetail" id="orderDetailBaseMap">
+		<id column="eod_id" property="eod_id"/>
+		<result column="eo_id" property="eo_id"/>
+		<result column="ep_id" property="ep_id"/>
+		<result column="eod_quantity" property="eod_quantity"/>
+		<result column="eod_cost" property="eod_cost"/>
+	</resultMap>
+	
+	<resultMap type="OrderDetail" id="orderDetailMap3" extends="orderDetailBaseMap">
+		<association property="order" resultMap="com.hr.dao.OrderMapper.orderBaseMap"></association>
+		<association property="product" resultMap="com.hr.dao.ProductMapper.productBaseMap"></association>
+	</resultMap>
+</mapper>
